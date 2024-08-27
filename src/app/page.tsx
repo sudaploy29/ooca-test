@@ -5,6 +5,7 @@ import { Button, FormControl, TextField, Typography, Card, CardContent, IconButt
 import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import Swal from 'sweetalert2';
 
 const GradientContainer = styled(Container)(({ theme }) => ({
   height: '100vh',
@@ -54,11 +55,19 @@ const Home = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/calculate', {
+      const response = await axios.post('http://localhost:8000/calculate', {
         items: orderedItems,
         hasMemberCard
       });
-      alert(`Total Price: ${response.data.totalPrice} THB`);
+      Swal.fire({
+        title: 'Total Price',
+        text: `${response.data.totalPrice} THB`,
+        icon: 'success',
+        confirmButtonText: 'OK',
+        customClass: {
+          container: 'my-swal-container', // Add custom class if needed
+        },
+      });
     } catch (error) {
       console.error('Error calculating price:', error);
     }

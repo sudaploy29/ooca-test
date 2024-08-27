@@ -247,6 +247,7 @@ const Home = () => {
             style={{
               fontWeight: 'bold',
               fontSize: '16px',
+              color:'white'
             }}
             variant='body1'
             component='span'

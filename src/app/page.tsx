@@ -105,7 +105,7 @@ const Home = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/calculate', {
+      const response = await axios.post('https://ooca-test-server.onrender.com/calculate', {
         items: orderedItems,
         hasMemberCard,
       })

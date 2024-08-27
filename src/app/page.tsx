@@ -79,7 +79,7 @@ const Home = () => {
               <CardContent>
                 <Grid container direction="column" alignContent={'center'} spacing={2}>
                   <Grid item>
-                    <Typography variant="h6" style={{ color: item.color,fontWeight:'bold',fontSize:'26px' }}>
+                    <Typography variant="h6" style={{ color: item.color,fontWeight:'bold',fontSize:'22px' }}>
                       {item.name}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
@@ -135,13 +135,13 @@ const Home = () => {
               />
             </Grid>
             <Grid item>
-              <Typography style={{  fontWeight:'bold',fontSize:'26px' }} variant="body1" component="span">
+              <Typography style={{  fontWeight:'bold',fontSize:'21px' }} variant="body1" component="span">
                 Member Card
               </Typography>
             </Grid>
           </Grid>
         </FormControl>
-        <Button style={{fontWeight:'bold',fontSize:'26px' }} size='large' variant="contained" color="success" onClick={handleSubmit}>
+        <Button style={{fontWeight:'bold',fontSize:'21px' }} size='large' variant="contained" color="success" onClick={handleSubmit}>
           Calculate Price
         </Button>
       </Box>

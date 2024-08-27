@@ -148,9 +148,9 @@ const Home = () => {
       </Typography>
       <Grid container spacing={3} justifyContent='center'>
         {itemOptions.map((item) => (
-          <Grid item xs={12} sm={6} md={4} key={item.id}>
-            <StyledCard>
-              <CardContentStyled>
+          <Grid item xs={12} sm={6} md={4} key={item.id} style={{backgroundColor:item.color}}>
+            <StyledCard style={{backgroundColor:item.color}}>
+              <CardContentStyled >
                 <Grid
                   container
                   direction='column'

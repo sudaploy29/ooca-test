@@ -1,0 +1,47 @@
+{
+	"info": {
+		"_postman_id": "2f3073bf-959b-4a1b-991b-4f7d064f049f",
+		"name": "OOCA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "11479801",
+		"_collection_link": "https://interstellar-equinox-762767.postman.co/workspace/API-Plane~55ec2a11-9a67-468e-a92e-087d70af02d8/collection/11479801-2f3073bf-959b-4a1b-991b-4f7d064f049f?action=share&source=collection_link&creator=11479801"
+	},
+	"item": [
+		{
+			"name": "Calculate-local",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"items\": [\n    { \"id\": 7, \"total\": 3 }    // ลูกค้าสั่งซื้อ Orange set จำนวน 3 ชุด\n  ],\n  \"hasMemberCard\": false       // ลูกค้ามีบัตรสมาชิก\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8000/calculate"
+			},
+			"response": []
+		},
+		{
+			"name": "Calculate-Prod",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"items\": [\n    { \"id\": 7, \"total\": 3 }     \n  ],\n  \"hasMemberCard\": true       \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://ooca-test-server.onrender.com/calculate"
+			},
+			"response": []
+		}
+	]
+}

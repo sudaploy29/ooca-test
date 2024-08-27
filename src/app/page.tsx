@@ -70,6 +70,15 @@ const Home = () => {
       });
     } catch (error) {
       console.error('Error calculating price:', error);
+         Swal.fire({
+        title: `Something's wrong!`,
+        text: `Error : ${error}`,
+        icon: 'error',
+        confirmButtonText: 'OK',
+        customClass: {
+          container: 'my-swal-container', // Add custom class if needed
+        },
+      });
     }
   };
 

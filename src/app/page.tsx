@@ -20,6 +20,11 @@ import RemoveIcon from '@mui/icons-material/Remove'
 import Swal from 'sweetalert2'
 import RestoreIcon from '@mui/icons-material/Restore'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import { CardProps } from '@mui/material/Card'
+
+interface StyledCardProps extends CardProps {
+  bgColor?: string
+}
 
 const GradientContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',
@@ -27,16 +32,19 @@ const GradientContainer = styled(Container)(({ theme }) => ({
   flexDirection: 'column',
   background: 'black',
   padding: theme.spacing(4),
-  paddingBottom: `calc(56px + ${theme.spacing(4)}px)`, // Adjust paddingBottom to accommodate button height
+  paddingBottom: `calc(56px + ${theme.spacing(4)}px)`,
 }))
 
-const StyledCard = styled(Card)(({ theme }) => ({
+const StyledCard = styled(Card, {
+  shouldForwardProp: (prop) => prop !== 'bgColor',
+})<StyledCardProps>(({ theme, bgColor }) => ({
   marginBottom: theme.spacing(2),
   textAlign: 'center',
   height: '160px',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
+  backgroundColor: bgColor || 'inherit',
 }))
 
 const CardContentStyled = styled(CardContent)(({ theme }) => ({
@@ -57,7 +65,7 @@ const itemOptions = [
     discount: 'Get 2 for 5% discount.',
   },
   { id: 3, name: 'Blue set', price: 30, color: '#2196f3', discount: '' },
-  { id: 4, name: 'Yellow set', price: 50, color: '#ffeb3b', discount: '' },
+  { id: 4, name: 'Yellow set', price: 50, color: '#d9d602', discount: '' },
   {
     id: 5,
     name: 'Pink set',
@@ -148,9 +156,9 @@ const Home = () => {
       </Typography>
       <Grid container spacing={3} justifyContent='center'>
         {itemOptions.map((item) => (
-          <Grid item xs={12} sm={6} md={4} key={item.id} style={{backgroundColor:item.color}}>
-            <StyledCard style={{backgroundColor:item.color}}>
-              <CardContentStyled >
+          <Grid item xs={12} sm={6} md={4} key={item.id}>
+            <StyledCard bgColor={item.color}>
+              <CardContentStyled>
                 <Grid
                   container
                   direction='column'
@@ -162,14 +170,14 @@ const Home = () => {
                     <Typography
                       variant='h6'
                       style={{
-                        color: item.color,
+                        color: 'white',
                         fontWeight: 'bold',
                         fontSize: '22px',
                       }}
                     >
                       {item.name}
                     </Typography>
-                    <Typography variant='body2' color='textSecondary'>
+                    <Typography variant='body2' color='white'>
                       Price: {item.price} THB
                     </Typography>
                   </Grid>
@@ -179,13 +187,17 @@ const Home = () => {
                         <Grid item>
                           <IconButton
                             onClick={() => updateItemQuantity(item.id, -1)}
-                            color='error'
+                            style={{ color: 'white' }}
                           >
                             <RemoveIcon />
                           </IconButton>
                         </Grid>
                         <Grid item>
-                          <Typography variant='h5' component='h2'>
+                          <Typography
+                            variant='h5'
+                            color={'white'}
+                            component='h2'
+                          >
                             {orderedItems.find((o) => o.id === item.id)
                               ?.total || 0}
                           </Typography>
@@ -193,7 +205,7 @@ const Home = () => {
                         <Grid item>
                           <IconButton
                             onClick={() => updateItemQuantity(item.id, 1)}
-                            color='primary'
+                            style={{ color: 'white' }}
                           >
                             <AddIcon />
                           </IconButton>
@@ -203,7 +215,9 @@ const Home = () => {
                   </Grid>
                   <Grid item>
                     {item.discount && (
-                      <Typography color={'red'}>** {item.discount}</Typography>
+                      <Typography  sx={{ fontWeight: 'bold' }} color={'black'}>
+                        ** {item.discount}
+                      </Typography>
                     )}
                   </Grid>
                 </Grid>
@@ -220,20 +234,20 @@ const Home = () => {
           right: 0,
           padding: 2,
           backgroundColor: 'black',
-          zIndex: 1000, // Ensures it stays on top of other content
+          zIndex: 1000, 
           display: 'flex',
           flexDirection: { xs: 'column', sm: 'column', md: 'row' },
           alignItems: 'center',
-          justifyContent: { xs: 'center', md: 'flex-end' }, // Aligns to right on md and larger
+          justifyContent: { xs: 'center', md: 'flex-end' },  
           gap: (theme) => theme.spacing(2),
         }}
       >
-        {/* Group the checkbox and label in a flex container */}
+       
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
-            gap: 1, // Space between checkbox and label
+            gap: 1, 
           }}
         >
           <Checkbox
@@ -247,12 +261,12 @@ const Home = () => {
             style={{
               fontWeight: 'bold',
               fontSize: '16px',
-              color:'white'
+              color: 'white',
             }}
             variant='body1'
             component='span'
           >
-            Member Card
+            Member Card ( 10% discount )
           </Typography>
         </Box>
 
@@ -273,10 +287,9 @@ const Home = () => {
         <Button
           onClick={handleSubmit}
           sx={{
-            width: { xs: '100%', md: 'auto' }, // Full width on small screens, auto on medium and above
-            ml: { md: 2 }, // Add margin-left on medium screens and above
-          }}
-          style={{ fontWeight: 'bold', fontSize: '16px' }}
+            width: { xs: '100%', md: 'auto' },  
+            ml: { md: 2 }, 
+          }} 
           size='small'
           variant='outlined'
           endIcon={<ShoppingCartIcon />}

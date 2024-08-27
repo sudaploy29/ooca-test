@@ -37,7 +37,7 @@ const GradientContainer = styled(Container)(({ theme }) => ({
 const StyledCard = styled(Card)(({ theme }) => ({
   marginBottom: theme.spacing(2),
   textAlign: 'center',
-  height: '170px', // กำหนดความสูงของการ์ด
+  height: '160px', // กำหนดความสูงของการ์ด
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -206,7 +206,8 @@ const Home = () => {
                     </FormControl>
                   </Grid>
                   <Grid item>
-                    <Typography color={'red'}>** {item.discount}</Typography>
+                    {item.discount && <Typography color={'red'}>** {item.discount }</Typography>}
+                    
                   </Grid>
                 </Grid>
               </CardContentStyled>

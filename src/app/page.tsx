@@ -13,6 +13,8 @@ import {
   Container,
   Checkbox,
   Box,
+  Backdrop,
+  CircularProgress,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import AddIcon from '@mui/icons-material/Add'
@@ -40,7 +42,8 @@ const StyledCard = styled(Card, {
 })<StyledCardProps>(({ theme, bgColor }) => ({
   marginBottom: theme.spacing(2),
   textAlign: 'center',
-  height: '160px',
+  height: '120px',
+  width: '290px',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -88,6 +91,7 @@ const Home = () => {
     { id: number; total: number }[]
   >([])
   const [hasMemberCard, setHasMemberCard] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const updateItemQuantity = (id: number, delta: number) => {
     setOrderedItems((prevItems) => {
@@ -108,6 +112,7 @@ const Home = () => {
   }
 
   const handleSubmit = async () => {
+    setLoading(true)
     try {
       const response = await axios.post(
         'https://ooca-test-server.onrender.com/calculate',
@@ -136,9 +141,10 @@ const Home = () => {
           container: 'my-swal-container',
         },
       })
+    } finally {
+      setLoading(false)
     }
   }
-
   const handleReset = () => {
     setOrderedItems([])
     setHasMemberCard(false)
@@ -154,100 +160,115 @@ const Home = () => {
       >
         Food Store Calculator
       </Typography>
-      <Grid container spacing={3} justifyContent='center'>
-        {itemOptions.map((item) => (
-          <Grid item xs={12} sm={6} md={4} key={item.id}>
-            <StyledCard bgColor={item.color}>
-              <CardContentStyled>
-                <Grid
-                  container
-                  direction='column'
-                  alignContent={'center'}
-                  alignItems={'center'}
-                  spacing={2}
-                >
-                  <Grid item>
-                    <Typography
-                      variant='h6'
-                      style={{
-                        color: 'white',
-                        fontWeight: 'bold',
-                        fontSize: '22px',
-                      }}
-                    >
-                      {item.name}
-                    </Typography>
-                    <Typography variant='body2' color='white'>
-                      Price: {item.price} THB
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <FormControl fullWidth>
-                      <Grid container alignItems='center' spacing={1}>
-                        <Grid item>
-                          <IconButton
-                            onClick={() => updateItemQuantity(item.id, -1)}
-                            style={{ color: 'white' }}
-                          >
-                            <RemoveIcon />
-                          </IconButton>
-                        </Grid>
-                        <Grid item>
-                          <Typography
-                            variant='h5'
-                            color={'white'}
-                            component='h2'
-                          >
-                            {orderedItems.find((o) => o.id === item.id)
-                              ?.total || 0}
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          <IconButton
-                            onClick={() => updateItemQuantity(item.id, 1)}
-                            style={{ color: 'white' }}
-                          >
-                            <AddIcon />
-                          </IconButton>
-                        </Grid>
-                      </Grid>
-                    </FormControl>
-                  </Grid>
-                  <Grid item>
-                    {item.discount && (
-                      <Typography  sx={{ fontWeight: 'bold' }} color={'black'}>
-                        ** {item.discount}
-                      </Typography>
-                    )}
-                  </Grid>
-                </Grid>
-              </CardContentStyled>
-            </StyledCard>
-          </Grid>
-        ))}
-      </Grid>
       <Box
         sx={{
-          position: 'fixed',
+          flexGrow: 1,
+          overflowY: 'auto',
+          paddingBottom: '16px', // Add padding to prevent overlap
+        }}
+      >
+        <Grid container spacing={2} justifyContent='center'>
+          {itemOptions.map((item) => (
+            <Grid item xs={12} sm={6} md={4} key={item.id}>
+              <StyledCard
+                bgColor={item.color}
+                sx={{
+                  width: { xs: '100%', sm: '90%', md: '290px' },
+                  height: { xs: 'auto', md: '120px' },
+                }}
+              >
+                <CardContentStyled>
+                  <Grid
+                    container
+                    direction='column'
+                    alignContent='center'
+                    alignItems='center'
+                    spacing={2}
+                  >
+                    <Grid item>
+                      <Typography
+                        variant='h6'
+                        style={{
+                          color: 'white',
+                          fontWeight: 'bold',
+                          fontSize: '24px',
+                        }}
+                      >
+                        {item.name}
+                      </Typography>
+                      <Typography
+                        variant='body2'
+                        style={{
+                          color: 'black',
+                          fontWeight: 'bold',
+                          fontSize: '12px',
+                        }}
+                      >
+                        Price: {item.price} THB{' '}
+                        {item.discount && `( ${item.discount} )`}
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <FormControl fullWidth>
+                        <Grid container alignItems='center' spacing={1}>
+                          <Grid item>
+                            <IconButton
+                              onClick={() => updateItemQuantity(item.id, -1)}
+                              style={{ color: 'white' }}
+                            >
+                              <RemoveIcon style={{ fontSize: '12px' }} />
+                            </IconButton>
+                          </Grid>
+                          <Grid item>
+                            <Typography
+                              style={{
+                                color: 'white',
+                                fontWeight: 'bold',
+                                fontSize: '18px',
+                              }}
+                            >
+                              {orderedItems.find((o) => o.id === item.id)
+                                ?.total || 0}
+                            </Typography>
+                          </Grid>
+                          <Grid item>
+                            <IconButton
+                              onClick={() => updateItemQuantity(item.id, 1)}
+                              style={{ color: 'white' }}
+                            >
+                              <AddIcon style={{ fontSize: '12px' }} />
+                            </IconButton>
+                          </Grid>
+                        </Grid>
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+                </CardContentStyled>
+              </StyledCard>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+      <Box
+        sx={{
           bottom: 0,
           left: 0,
           right: 0,
           padding: 2,
           backgroundColor: 'black',
-          zIndex: 1000, 
+          zIndex: 1000,
           display: 'flex',
           flexDirection: { xs: 'column', sm: 'column', md: 'row' },
           alignItems: 'center',
-          justifyContent: { xs: 'center', md: 'flex-end' },  
+          justifyContent: { xs: 'center', md: 'flex-end' },
           gap: (theme) => theme.spacing(2),
         }}
       >
-       
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
-            gap: 1, 
+            gap: 1,
           }}
         >
           <Checkbox
@@ -260,7 +281,7 @@ const Home = () => {
           <Typography
             style={{
               fontWeight: 'bold',
-              fontSize: '16px',
+              fontSize: '14px',
               color: 'white',
             }}
             variant='body1'
@@ -287,16 +308,40 @@ const Home = () => {
         <Button
           onClick={handleSubmit}
           sx={{
-            width: { xs: '100%', md: 'auto' },  
-            ml: { md: 2 }, 
-          }} 
+            width: { xs: '100%', md: 'auto' },
+            ml: { md: 2 },
+            color: loading || orderedItems.length === 0 ? 'grey.500' : 'white',
+            borderColor:
+              loading || orderedItems.length === 0 ? 'grey.500' : 'white',
+            backgroundColor: (theme) =>
+              loading || orderedItems.length === 0
+                ? theme.palette.grey[800]
+                : theme.palette.primary.main,
+            '&:hover': {
+              backgroundColor: (theme) =>
+                loading || orderedItems.length === 0
+                  ? theme.palette.grey[800]
+                  : theme.palette.primary.dark,
+              borderColor: 'white',
+            },
+          }}
           size='small'
           variant='outlined'
           endIcon={<ShoppingCartIcon />}
-          disabled={orderedItems.length === 0}
+          disabled={loading || orderedItems.length === 0}
         >
           Calculate Price
         </Button>
+
+        <Backdrop
+          sx={{
+            color: '#fff',
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
+          open={loading}
+        >
+          <CircularProgress color='inherit' />
+        </Backdrop>
       </Box>
     </GradientContainer>
   )
